@@ -5,7 +5,7 @@ from pyramid.response import Response
 
 def add_hello_world_endpoint(request):
     print('Incoming request')
-    return Response('<body><h1>Hello World!</h1></body>')
+    return Response(status=200, body='Hello World!')
 
 def add_endpoints(config: Configurator):
     # hello world
