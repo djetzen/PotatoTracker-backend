@@ -5,7 +5,7 @@ Shopping app backend, which should be deployed later on a raspberry pi
 ### Tables
 User (ID (PK), Name:String)
 Purchase (ID (PK), UserId(FK))
-Purchase-Element (PurchaseID(PK),ElementID(PK))
+Purchase-Element (PurchaseID(PK),ElementID(PK), alreadyBought:boolean)
 Element (ID (PK), Name:String, Amount:Float, Price:Float)
 
 ### Cardinalities
