@@ -11,7 +11,6 @@ def add_endpoint(request):
 
 def __valid(request_body):
     parsed_body=json.loads(request_body)
-    print(parsed_body)
     return ("user" in parsed_body) and ("amount" in parsed_body) and ("elementName" in parsed_body)
 
 def add_all_endpoints(config):
