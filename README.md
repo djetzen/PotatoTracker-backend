@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/djetzen/PotatoTracker-backend.svg?branch=master)](https://travis-ci.com/djetzen/PotatoTracker-backend)
+
 # PotatoTracker-backend
 Shopping app backend, which should be deployed later on a raspberry pi
 
