@@ -3,14 +3,13 @@ from pyramid.config import Configurator
 from pyramid.response import Response
 
 
-def add_hello_world_endpoint(request):
+def hello_world_endpoint(request):
     print('Incoming request')
     return Response(status=200, body='Hello World!')
 
-def add_endpoints(config: Configurator):
-    # hello world
+def add_endpoints(config):
     config.add_route('hello', '/')
-    config.add_view(add_hello_world_endpoint, route_name='hello')
+    config.add_view(hello_world_endpoint, route_name='hello')
 
 if __name__ == '__main__':
     config = Configurator()
