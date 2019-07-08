@@ -1,5 +1,4 @@
 import unittest
-
 from pyramid import testing
 from backend.backend import add_endpoints
 
@@ -17,6 +16,6 @@ class TutorialViewTests(unittest.TestCase):
         from backend.backend import hello_world_endpoint
         request = testing.DummyRequest()
         response = hello_world_endpoint(request)
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.body,b"Hello World!")
