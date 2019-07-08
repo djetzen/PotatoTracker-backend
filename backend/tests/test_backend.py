@@ -38,7 +38,7 @@ class BackendTests(unittest.TestCase):
         self.assertEqual(add_endpoint(request).status_code, 400)
 
         request.body=missing_amount
-        self.assertEqual(add_endpoint(request).status_code, 400)
+        self.assertEqual(add_endpoint(request).status_code, 401)
 
 
     def test_empty_add_endpoint_returns_error_message(self):
