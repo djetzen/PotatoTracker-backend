@@ -15,34 +15,34 @@ class BackendTests(unittest.TestCase):
         testing.tearDown()
 
     def test_add_endpoint_returns_valid_status(self):
-        add_to_cart_json=b'{"user": "User","elementName": "lemons","amount": "5"}'
-        request = Request.blank("/add")
-        request.method='POST'
-        request.body=add_to_cart_json
-        response = add_endpoint(request)
+        valid_json=b'{"user": "User","elementName": "lemons","amount": "5"}'
+        response = add_endpoint(self.create_add_request(valid_json))
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.body,add_to_cart_json)
+        self.assertEqual(response.body,valid_json)
 
     
     def test_invalid_requests(self):
         missing_user=b'{"elementName": "lemons","amount": "5"}'
         missing_elementName=b'{"user": "User","amount": "5"}'
         missing_amount=b'{"user": "User","elementName": "lemons"}'
-        request = Request.blank("/add")
-        request.method='POST'
-        request.body=missing_user
-        self.assertEqual(add_endpoint(request).status_code, 400)
 
-        request.body=missing_elementName
-        self.assertEqual(add_endpoint(request).status_code, 400)
+        self.check_add_endpoint_status(self.create_add_request(missing_user), 400)
 
-        request.body=missing_amount
-        self.assertEqual(add_endpoint(request).status_code, 400)
+        self.check_add_endpoint_status(self.create_add_request(missing_elementName), 400)
+
+        self.check_add_endpoint_status(self.create_add_request(missing_amount), 400)
 
 
     def test_empty_add_endpoint_returns_error_message(self):
         request = testing.DummyRequest(method='POST')
-        response = add_endpoint(request)
+        self.check_add_endpoint_status(request, 400)
+    
+    def check_add_endpoint_status(self, request, status_code:int):
+        self.assertEqual(add_endpoint(request).status_code, status_code)
 
-        self.assertEqual(response.status_code, 400)
+    def create_add_request(self, json):
+        request = Request.blank("/add")
+        request.method='POST'
+        request.body=json
+        return request
