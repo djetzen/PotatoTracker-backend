@@ -1,8 +1,8 @@
 from waitress import serve
 from pyramid.config import Configurator
 from pyramid.response import Response
+from backend.db.database import Database
 import json
-from backend.db.db_scheme import create_tables
 
 
 def add_endpoint(request):
@@ -15,9 +15,9 @@ def add_endpoint(request):
 def __valid(request_body):
     parsed_body = json.loads(request_body)
     return (
-        ("user" in parsed_body)
-        and ("amount" in parsed_body)
-        and ("elementName" in parsed_body)
+            ("user" in parsed_body)
+            and ("amount" in parsed_body)
+            and ("elementName" in parsed_body)
     )
 
 
@@ -29,7 +29,7 @@ def add_all_endpoints(config):
 if __name__ == "__main__":
     config = Configurator()
     add_all_endpoints(config)
-    engine = create_tables()
+    database = Database("sqlite:///database.db")
+    database.create_database()
     app = config.make_wsgi_app()
     serve(app, host="0.0.0.0", port=6543)
-
