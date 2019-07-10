@@ -3,7 +3,7 @@ from pyramid import testing
 from sqlalchemy import inspect
 from backend.db.repository import Repository
 from backend.db.database import create_database
-from backend.db.scheme import Purchase
+from backend.db.scheme import Purchase, Element
 
 
 class RepositoryTest(unittest.TestCase):
@@ -41,6 +41,15 @@ class RepositoryTest(unittest.TestCase):
 
         all_purchases = self.repository.find_all_purchases()
         self.assertEqual(4, len(all_purchases))
+
+    def test_element_is_saved(self):
+        empty_elements = self.repository.find_all_elements()
+        element = Element(name="Lemons", amount=5, price=3.50)
+        self.repository.create_new_element(element)
+
+        saved_elements = self.repository.find_all_elements()
+        self.assertEqual(0, len(empty_elements))
+        self.assertEqual(1,len(saved_elements))
 
     def create_purchases(self, number_of_times:int, user_name:str):
         for x in range(number_of_times):

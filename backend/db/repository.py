@@ -1,4 +1,4 @@
-from backend.db.scheme import Purchase
+from backend.db.scheme import Purchase, Element
 from sqlalchemy import Table, MetaData
 from backend import engine
 from sqlalchemy.orm import sessionmaker
@@ -24,6 +24,14 @@ class Repository:
     def find_all_purchases(self):
         session = self.__get_session()
         return session.query(Purchase).all()
+
+    def find_all_elements(self):
+        session = self.__get_session()
+        return session.query(Element).all()
+    
+    def create_new_element(self, element: Element):
+        session = self.__get_session()
+        self.__add_and_commit(session,element)
 
     def __get_session(self):
         Session = sessionmaker(bind=self.__engine)
