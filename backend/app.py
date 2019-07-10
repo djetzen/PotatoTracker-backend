@@ -1,7 +1,9 @@
 from waitress import serve
 from pyramid.config import Configurator
 from pyramid.response import Response
+from backend.db.database import Base, create_database
 import json
+
 
 def add_endpoint(request):
     if not request.body or not __valid(request.body):
@@ -9,24 +11,32 @@ def add_endpoint(request):
     else:
         return Response(status=201, body=request.body)
 
+
 def show_cart_endpoint(request):
     return Response(status=200)
 
+
 def __valid(request_body):
-    parsed_body=json.loads(request_body)
-    return ("user" in parsed_body) and ("amount" in parsed_body) and ("elementName" in parsed_body)
+    parsed_body = json.loads(request_body)
+    return (
+        ("user" in parsed_body)
+        and ("amount" in parsed_body)
+        and ("elementName" in parsed_body)
+    )
+
 
 def add_all_endpoints(config):
     # add endpoint
-    config.add_route('add', '/add', request_method='POST')
-    config.add_view(add_endpoint, route_name='add')
+    config.add_route("add", "/add", request_method="POST")
+    config.add_view(add_endpoint, route_name="add")
 
     # showCart endpoint
-    config.add_route('showCart', '/showCart', request_method='GET')
-    config.add_view(show_cart_endpoint, route_name='showCart')
+    config.add_route("showCart", "/showCart", request_method="GET")
+    config.add_view(show_cart_endpoint, route_name="showCart")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     config = Configurator()
     add_all_endpoints(config)
     app = config.make_wsgi_app()
-    serve(app, host='0.0.0.0', port=6543)
+    serve(app, host="0.0.0.0", port=6543)
