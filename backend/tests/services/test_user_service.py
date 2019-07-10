@@ -1,16 +1,16 @@
 import unittest
 from pyramid import testing
 from sqlalchemy import inspect
-from backend.db.database import Database
 from backend.db.repository import Repository
+from backend.db.database import create_database
+from backend.db.scheme import User
 
 
-class RepositoryTests(unittest.TestCase):
+class UserServiceTests(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
-        self.database = Database("sqlite://")
-        self.database.create_database()
-        self.repository = Repository(self.database)
+        self.engine = create_database("sqlite://")
+        self.repository = Repository(self.engine)
 
     def tearDown(self):
         testing.tearDown()
@@ -21,5 +21,5 @@ class RepositoryTests(unittest.TestCase):
         self.repository.save_user(name)
 
         user_is_saved = self.repository.find_user(name)
-        self.assertEqual([], user_is_not_saved)
-        self.assertEqual([('Dominik',)], user_is_saved)
+        self.assertEqual(None, user_is_not_saved)
+        self.assertEqual(User(user_name='Dominik'), user_is_saved)

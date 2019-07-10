@@ -1,7 +1,7 @@
 import unittest
 from pyramid import testing
 from pyramid.request import Request
-from backend.backend import add_all_endpoints, add_endpoint
+from backend.app import add_all_endpoints, add_endpoint
 
 
 class BackendTests(unittest.TestCase):
