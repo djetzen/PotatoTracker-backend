@@ -32,6 +32,9 @@ class Repository:
     def find_all_elements_by_name(self, element_name:str):
         return self.session.query(Element).filter_by(name=element_name).all()
 
+    def find_all_elements_for_user(self, user_name:str):
+        return self.session.query(Element).filter_by(user_name=user_name).all()
+        
     def __get_session(self):
         return self.session
 

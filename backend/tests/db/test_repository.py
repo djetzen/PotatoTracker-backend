@@ -59,6 +59,15 @@ class RepositoryTest(unittest.TestCase):
         saved_lemons = self.repository.find_all_elements_by_name("Lemons")
         self.assertEqual(2, len(saved_lemons))
 
+    def test_find_all_elements_by_user(self):
+        self.repository.create_new_element(Element(name="Lemons",amount=5, price=3.50, user_name=self.user_name))
+        self.repository.create_new_element(Element(name="Lemons",amount=5, price=3.50, user_name=self.user_name))
+        self.repository.create_new_element(Element(name="Apples",amount=5, price=3.50, user_name="Peter"))
+
+        karls_elements = self.repository.find_all_elements_for_user(self.user_name)
+        self.assertEqual(2,len(karls_elements))
+
+
     def create_purchases(self, number_of_times:int, user_name:str):
         for x in range(number_of_times):
             self.repository.create_new_purchase(user_name)

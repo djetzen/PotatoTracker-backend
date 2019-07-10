@@ -6,6 +6,7 @@ class Purchase(Base):
     __tablename__ = "purchase"
     purchase_id = Column(Integer, primary_key=True)
     user_name = Column(String)
+    elements = relationship("Element", back_populates="purchase")
 
     def __eq__(self, value):
         return self.purchase_id==value.purchase_id and self.user_name==value.user_name
@@ -16,4 +17,6 @@ class Element(Base):
     name = Column(String)
     amount = Column(Float)
     price = Column(Float)
+    user_name = Column(String)
     purchase_id = Column(Integer, ForeignKey("purchase.purchase_id"))
+    purchase = relationship("Purchase", back_populates="elements")
