@@ -1,7 +1,7 @@
 import unittest
 from pyramid import testing
 from pyramid.request import Request
-from backend.backend import add_all_endpoints, add_endpoint, show_cart_endpoint
+from backend.app import add_all_endpoints, add_endpoint, show_cart_endpoint
 
 
 class BackendTests(unittest.TestCase):
@@ -38,7 +38,7 @@ class BackendTests(unittest.TestCase):
 
     def test_show_cart_endpoint_is_available(self):
         request = testing.DummyRequest()
-        self.assertEquals(show_cart_endpoint(request).status_code, 200)
+        self.assertEqual(show_cart_endpoint(request).status_code, 200)
 
     def check_add_endpoint_status(self, request, status_code: int):
         self.assertEqual(add_endpoint(request).status_code, status_code)
