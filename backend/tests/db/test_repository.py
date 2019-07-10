@@ -58,7 +58,7 @@ class RepositoryTest(unittest.TestCase):
 
         saved_lemons = self.repository.find_all_elements_by_name("Lemons")
         self.assertEqual(2, len(saved_lemons))
-
+    
     def test_find_all_elements_by_user(self):
         self.repository.create_new_element(Element(name="Lemons",amount=5, price=3.50, user_name=self.user_name))
         self.repository.create_new_element(Element(name="Lemons",amount=5, price=3.50, user_name=self.user_name))
@@ -85,6 +85,35 @@ class RepositoryTest(unittest.TestCase):
 
         self.assertEqual(0,len(bought_elements_before))
         self.assertEqual(1,len(bought_elements_after))
+    
+    def test_find_elements_by_purchase_id(self):
+        element1 = Element(name="Lemons",purchase_id=1)
+        element2 = Element(name="Lemons")
+        self.repository.create_new_element(element1)
+        self.repository.create_new_element(element2)
+
+        found_elements=self.repository.find_all_elements_by_purchase_id(1)
+        self.assertEqual(1, len(found_elements))
+
+    def test_purchase_is_created(self):
+        element1 = Element(name="Lemons",amount=5, price=3.50, user_name=self.user_name)
+        element2 = Element(name="Lemons",amount=5, price=3.50, user_name=self.user_name)
+        element3 =Element(name="Apples",amount=5, price=3.50, user_name=self.user_name)
+        self.repository.create_new_element(element1)
+        self.repository.create_new_element(element2)
+        self.repository.create_new_element(element3)
+
+        self.repository.buy_elements([element1,element2])
+        purchased_elements = self.repository.find_all_elements_by_purchase_id(1)
+        bought_elements = self.repository.find_only_bought_elements_by_user(self.user_name)
+        self.assertEqual(2,len(bought_elements))
+        self.assertEqual(2, len(purchased_elements))
+
+        purchases = self.repository.find_all_purchases()
+        self.assertEqual(1, len(purchases))
+        self.assertEqual(self.user_name, purchases[0].user_name)
+        self.assertEqual(1, purchases[0].purchase_id)
+
 
     def create_purchases(self, number_of_times:int, user_name:str):
         for x in range(number_of_times):

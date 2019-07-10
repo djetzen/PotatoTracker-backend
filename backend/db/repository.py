@@ -2,6 +2,7 @@ from backend.db.scheme import Purchase, Element
 from sqlalchemy import Table, MetaData
 from backend import engine
 from sqlalchemy.orm import sessionmaker
+from typing import List
 
 
 class Repository:
@@ -13,6 +14,7 @@ class Repository:
     def create_new_purchase(self, user_name: str):
         purchase = Purchase(user_name=user_name)
         self.__add_and_commit(purchase)
+        return purchase
 
     def find_all_purchases_for_user(self, user_name: str):
         return self.session.query(Purchase).filter_by(user_name=user_name).all()
@@ -38,9 +40,21 @@ class Repository:
     def find_only_bought_elements_by_user(self, user_name:str):
         return self.session.query(Element).filter_by(user_name=user_name).filter_by(bought=True).all()
 
+    def find_all_elements_by_purchase_id(self, purchase_id:int):
+        return self.session.query(Element).filter_by(purchase_id=purchase_id).all()
+
     def mark_as_bought(self, element:Element):
         element.bought=True
         return self.__add_and_commit(element)
+
+    def buy_elements(self, elements:List[Element]):
+        if not elements:
+            return
+        purchase = self.create_new_purchase(elements[0].user_name)
+        for element in elements:
+            self.mark_as_bought(element)
+            element.purchase_id = purchase.purchase_id
+            self.__add_and_commit(element)
 
     def __get_session(self):
         return self.session
