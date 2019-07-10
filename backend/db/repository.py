@@ -7,39 +7,34 @@ from sqlalchemy.orm import sessionmaker
 class Repository:
     def __init__(self, engine):
         self.__engine = engine
+        Session = sessionmaker(bind=self.__engine)
+        self.session = Session()
 
-    def create_new_purchase(self, user_name:str):
-        session = self.__get_session()
+    def create_new_purchase(self, user_name: str):
         purchase = Purchase(user_name=user_name)
-        self.__add_and_commit(session, purchase)
+        self.__add_and_commit(self.session, purchase)
 
-    def find_all_purchases_for_user(self, user_name:str):
-        session = self.__get_session()
-        return session.query(Purchase).filter_by(user_name=user_name).all()
+    def find_all_purchases_for_user(self, user_name: str):
+        return self.session.query(Purchase).filter_by(user_name=user_name).all()
 
     def find_purchase_by_id(self, id: int):
-         session = self.__get_session()
-         return session.query(Purchase).filter_by(purchase_id=id).first()
+        return self.session.query(Purchase).filter_by(purchase_id=id).first()
 
     def find_all_purchases(self):
-        session = self.__get_session()
-        return session.query(Purchase).all()
+        return self.session.query(Purchase).all()
 
     def find_all_elements(self):
-        session = self.__get_session()
-        return session.query(Element).all()
-    
+        return self.session.query(Element).all()
+
     def create_new_element(self, element: Element):
-        session = self.__get_session()
-        self.__add_and_commit(session,element)
+        self.__add_and_commit(self.session, element)
 
     def __get_session(self):
-        Session = sessionmaker(bind=self.__engine)
-        session=Session()
-        return session
+        return self.session
 
     def __add_and_commit(self, session, element):
-        session.add(element)
-        session.commit()    
+        self.session.add(element)
+        self.session.commit()
+
 
 repository_impl = Repository(engine)

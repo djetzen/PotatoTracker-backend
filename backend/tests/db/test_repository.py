@@ -44,12 +44,12 @@ class RepositoryTest(unittest.TestCase):
 
     def test_element_is_saved(self):
         empty_elements = self.repository.find_all_elements()
-        element = Element(name="Lemons", amount=5, price=3.50)
-        self.repository.create_new_element(element)
+        self.repository.create_new_element(Element(name="Lemons", amount=5, price=3.50))
+        self.repository.create_new_element(Element(name="Apples", amount=5, price=3.50))
 
         saved_elements = self.repository.find_all_elements()
         self.assertEqual(0, len(empty_elements))
-        self.assertEqual(1,len(saved_elements))
+        self.assertEqual(2,len(saved_elements))
 
     def create_purchases(self, number_of_times:int, user_name:str):
         for x in range(number_of_times):
