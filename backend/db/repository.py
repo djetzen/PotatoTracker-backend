@@ -29,6 +29,9 @@ class Repository:
     def create_new_element(self, element: Element):
         self.__add_and_commit(self.session, element)
 
+    def find_all_elements_by_name(self, element_name:str):
+        return self.session.query(Element).filter_by(name=element_name).all()
+
     def __get_session(self):
         return self.session
 
