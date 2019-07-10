@@ -25,24 +25,23 @@ class RepositoryTest(unittest.TestCase):
         self.assertEqual(1,len(saved_purchases))
 
     def test_single_purchase_is_found(self):
-        self.repository.create_new_purchase(self.user_name)
-        self.repository.create_new_purchase(self.user_name)
+        self.create_purchases(2,self.user_name)
 
         single_purchase = self.repository.find_purchase_by_id(1)
         self.assertEqual(Purchase(purchase_id=1, user_name=self.user_name), single_purchase)
 
     def test_all_purchases_for_user_are_found(self):
-        self.repository.create_new_purchase(self.user_name)
-        self.repository.create_new_purchase(self.user_name)
+        self.create_purchases(2,self.user_name)
 
         all_purchases = self.repository.find_all_purchases_for_user(self.user_name)
         self.assertEqual(2, len(all_purchases))
     
     def test_all_purchases_are_found(self):
-        self.repository.create_new_purchase(self.user_name)
-        self.repository.create_new_purchase(self.user_name)
-        self.repository.create_new_purchase(self.user_name)
-        self.repository.create_new_purchase(self.user_name)
+        self.create_purchases(4,self.user_name)
 
         all_purchases = self.repository.find_all_purchases()
         self.assertEqual(4, len(all_purchases))
+
+    def create_purchases(self, number_of_times:int, user_name:str):
+        for x in range(number_of_times):
+            self.repository.create_new_purchase(user_name)
