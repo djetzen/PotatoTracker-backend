@@ -38,3 +38,11 @@ class RepositoryTest(unittest.TestCase):
         all_purchases = self.repository.find_all_purchases_for_user(self.user_name)
         self.assertEqual(2, len(all_purchases))
     
+    def test_all_purchases_are_found(self):
+        self.repository.create_new_purchase(self.user_name)
+        self.repository.create_new_purchase(self.user_name)
+        self.repository.create_new_purchase(self.user_name)
+        self.repository.create_new_purchase(self.user_name)
+
+        all_purchases = self.repository.find_all_purchases()
+        self.assertEqual(4, len(all_purchases))

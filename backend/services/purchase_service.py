@@ -12,3 +12,6 @@ class PurchaseService:
 
     def find_purchase_by_id(self, id:int):
         self.__repository.find_purchase_by_id(id)
+
+    def find_all_purchases(self):
+        self.__repository.find_all_purchases()

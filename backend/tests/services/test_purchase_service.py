@@ -10,6 +10,7 @@ def run_around_tests(mocker):
     mocker.patch.object(repository, "create_new_purchase")
     mocker.patch.object(repository, "find_all_purchases_for_user")
     mocker.patch.object(repository, "find_purchase_by_id")
+    mocker.patch.object(repository, "find_all_purchases")
     yield
 
 def test_should_call_create_new_purchase():
@@ -25,3 +26,6 @@ def test_should_call_find_purchase_by_id():
     service.find_purchase_by_id(1)
     assert repository.find_purchase_by_id.call_count == 1
 
+def test_should_call_find_all_purchases():
+    service.find_all_purchases()
+    assert repository.find_all_purchases.call_count == 1

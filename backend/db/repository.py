@@ -21,6 +21,10 @@ class Repository:
          session = self.__get_session()
          return session.query(Purchase).filter_by(purchase_id=id).first()
 
+    def find_all_purchases(self):
+        session = self.__get_session()
+        return session.query(Purchase).all()
+
     def __get_session(self):
         Session = sessionmaker(bind=self.__engine)
         session=Session()
