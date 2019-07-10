@@ -12,7 +12,7 @@ class Repository:
 
     def create_new_purchase(self, user_name: str):
         purchase = Purchase(user_name=user_name)
-        self.__add_and_commit(self.session, purchase)
+        self.__add_and_commit(purchase)
 
     def find_all_purchases_for_user(self, user_name: str):
         return self.session.query(Purchase).filter_by(user_name=user_name).all()
@@ -27,7 +27,7 @@ class Repository:
         return self.session.query(Element).all()
 
     def create_new_element(self, element: Element):
-        self.__add_and_commit(self.session, element)
+        self.__add_and_commit(element)
 
     def find_all_elements_by_name(self, element_name:str):
         return self.session.query(Element).filter_by(name=element_name).all()
@@ -37,11 +37,15 @@ class Repository:
 
     def find_only_bought_elements_by_user(self, user_name:str):
         return self.session.query(Element).filter_by(user_name=user_name).filter_by(bought=True).all()
-        
+
+    def mark_as_bought(self, element:Element):
+        element.bought=True
+        return self.__add_and_commit(element)
+
     def __get_session(self):
         return self.session
 
-    def __add_and_commit(self, session, element):
+    def __add_and_commit(self, element):
         self.session.add(element)
         self.session.commit()
 

@@ -75,6 +75,16 @@ class RepositoryTest(unittest.TestCase):
         bought_elements = self.repository.find_only_bought_elements_by_user(self.user_name)
         self.assertEqual(2,len(bought_elements))
 
+    def test_element_can_be_updated_to_be_bought(self):
+        element = Element(name="Lemons",amount=5, price=3.50, user_name=self.user_name)
+        self.repository.create_new_element(element)
+        bought_elements_before=self.repository.find_only_bought_elements_by_user(self.user_name)
+        self.repository.mark_as_bought(element)
+
+        bought_elements_after = self.repository.find_only_bought_elements_by_user(self.user_name)
+
+        self.assertEqual(0,len(bought_elements_before))
+        self.assertEqual(1,len(bought_elements_after))
 
     def create_purchases(self, number_of_times:int, user_name:str):
         for x in range(number_of_times):
