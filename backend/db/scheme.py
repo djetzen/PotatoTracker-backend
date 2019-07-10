@@ -1,5 +1,5 @@
 from backend.db.database import Base
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 class Purchase(Base):
@@ -18,5 +18,6 @@ class Element(Base):
     amount = Column(Float)
     price = Column(Float)
     user_name = Column(String)
+    bought = Column(Boolean)
     purchase_id = Column(Integer, ForeignKey("purchase.purchase_id"))
     purchase = relationship("Purchase", back_populates="elements")

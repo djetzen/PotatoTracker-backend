@@ -34,6 +34,9 @@ class Repository:
 
     def find_all_elements_for_user(self, user_name:str):
         return self.session.query(Element).filter_by(user_name=user_name).all()
+
+    def find_only_bought_elements_by_user(self, user_name:str):
+        return self.session.query(Element).filter_by(user_name=user_name).filter_by(bought=True).all()
         
     def __get_session(self):
         return self.session
