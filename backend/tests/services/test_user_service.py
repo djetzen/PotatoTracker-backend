@@ -1,25 +1,22 @@
-import unittest
-from pyramid import testing
-from sqlalchemy import inspect
+import pytest
 from backend.db.repository import Repository
-from backend.db.database import create_database
-from backend.db.scheme import User
+from backend.services.user_service import UserService
 
+repository = Repository(None)
+service = UserService(repository)
 
-class UserServiceTests(unittest.TestCase):
-    def setUp(self):
-        self.config = testing.setUp()
-        self.engine = create_database("sqlite://")
-        self.repository = Repository(self.engine)
+@pytest.fixture(autouse=True)
+def run_around_tests(mocker):
+    mocker.patch.object(repository, "save_user")
+    mocker.patch.object(repository, "find_user")
+    yield
 
-    def tearDown(self):
-        testing.tearDown()
+def test_should_call_save_on_repository():
+    service.save('')
 
-    def test_user_can_be_saved(self):
-        name = "Dominik"
-        user_is_not_saved = self.repository.find_user(name)
-        self.repository.save_user(name)
+    assert repository.save_user.call_count == 1
 
-        user_is_saved = self.repository.find_user(name)
-        self.assertEqual(None, user_is_not_saved)
-        self.assertEqual(User(user_name='Dominik'), user_is_saved)
+def test_should_call_find_user_on_repository():
+    service.find('')
+    assert repository.find_user.call_count == 1
+

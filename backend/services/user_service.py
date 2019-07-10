@@ -7,4 +7,7 @@ class UserService:
     def save(self, user_name:str):
         self.__repository.save_user(user_name)
 
+    def find(self, user_name:str):
+        self.__repository.find_user(user_name)
+
 user_service = UserService(repository_impl)
