@@ -8,5 +8,5 @@ RUN pip3 install -r requirements.txt
 
 EXPOSE 6543
 
-CMD ["python3", "backend/backend.py"]
+CMD ["python3","-m", "backend.app"]
 
