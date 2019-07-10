@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-from backend.db.scheme import User, Purchase, Element
+from backend.db.scheme import Purchase, Element
 
 
 def create_database(db_path) -> engine:
