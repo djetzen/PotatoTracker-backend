@@ -148,7 +148,7 @@ class RepositoryTest(unittest.TestCase):
             self.repository.create_new_purchase(user_name)
 
     def create_element(
-        self, name="", amount=0, price=0, bought=False, user_name="", purchase_id=1
+        self, name="", amount=0, price=0, bought=False, user_name="", purchase_id=0
     ):
         return Element(
             name=name,
