@@ -1,5 +1,4 @@
 from backend.db.repository import repository_impl
-from backend.db.scheme import ElementEntity
 from backend.domain.element import Element
 from typing import List
 from backend.db.repository import repository_impl
@@ -27,7 +26,7 @@ class ElementService:
     def find_elements_by_purchase_id(self, purchase_id: int):
         self.__repository.find_all_elements_by_purchase_id(purchase_id)
 
-    def buy_elements(self, elements: List[ElementEntity]):
+    def buy_elements(self, elements: List[Element]):
         self.__repository.buy_elements(elements)
 
 

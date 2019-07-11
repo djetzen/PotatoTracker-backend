@@ -2,7 +2,6 @@ from waitress import serve
 from pyramid.config import Configurator
 from pyramid.response import Response
 from backend.db.database import Base, create_database
-from backend.db.scheme import ElementEntity
 from backend.services.element_service import element_service_impl
 from backend.json_helpers import valid_request_to_add_endpoint, create_element
 from backend.db.json_mapper import JSONMapper
