@@ -2,27 +2,21 @@ from waitress import serve
 from pyramid.config import Configurator
 from pyramid.response import Response
 from backend.db.database import Base, create_database
+from backend.db.scheme import Element
+from backend.json_helpers import valid_request_to_add_endpoint, create_element
 import json
 
 
 def add_endpoint(request):
-    if not request.body or not __valid(request.body):
+    if not request.body or not valid_request_to_add_endpoint(request.body):
         return Response(status=400)
     else:
+        element = create_element(request.body)
         return Response(status=201, body=request.body)
 
 
 def show_cart_endpoint(request):
     return Response(status=200)
-
-
-def __valid(request_body):
-    parsed_body = json.loads(request_body)
-    return (
-        ("user" in parsed_body)
-        and ("amount" in parsed_body)
-        and ("elementName" in parsed_body)
-    )
 
 
 def add_all_endpoints(config):
