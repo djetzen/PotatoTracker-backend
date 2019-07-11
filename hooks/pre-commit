@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# make sure black is available
+which black > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Unable to run precommit hook, black is not available"
+    exit 1
+fi
+
+# find any staged py files
+files="$(git diff --name-only --cached | grep '.*\.py$' | paste -sd ' ' -)"
+if [ "$files" == "" ]; then
+    echo "No files to reformat, skipping"
+    exit 0
+fi
+
+# run the autoformat
+black $files
+
+# re-stage
+git diff --name-only --cached | xargs git add
