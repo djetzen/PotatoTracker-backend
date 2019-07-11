@@ -9,16 +9,21 @@ import backend.json_helpers
 
 valid_json = b'{"user_name": "User","name": "lemons","amount": "5"}'
 
+
 @pytest.fixture(autouse=True)
 def run_around_tests(mocker):
     mocker.patch.object(element_service_impl, "create_new_element")
     yield
 
+
 def test_add_endpoint_returns_valid_status():
     response = add_endpoint(create_add_request(valid_json))
 
     assert response.status_code == 201
-    assert response.body == b'{"name": "lemons", "amount": "5", "price": 0.0, "user_name": "User", "bought": false, "purchase_id": null}'
+    assert (
+        response.body
+        == b'{"name": "lemons", "amount": "5", "price": 0.0, "user_name": "User", "bought": false, "purchase_id": null}'
+    )
 
 
 def test_add_endpoint_with_valid_json_calls_service():
@@ -30,7 +35,7 @@ def test_add_endpoint_with_valid_json_calls_service():
 def test_invalid_requests(valid_request_to_add_endpoint):
 
     valid_request_to_add_endpoint.return_value = "False"
-    check_add_endpoint_status(request = create_add_request(None), status_code = 400)
+    check_add_endpoint_status(request=create_add_request(None), status_code=400)
 
 
 def test_empty_add_endpoint_returns_error_message():

@@ -25,4 +25,3 @@ class Element:
             + str(self.purchase_id)
             + ">"
         )
-

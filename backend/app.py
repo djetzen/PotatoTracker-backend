@@ -8,6 +8,7 @@ from backend.json_helpers import valid_request_to_add_endpoint, create_element
 from backend.db.json_mapper import JSONMapper
 import json
 
+
 def add_endpoint(request):
     if not request.body or not valid_request_to_add_endpoint(request.body):
         return Response(status=400)
@@ -15,6 +16,7 @@ def add_endpoint(request):
         element = create_element(request.body)
         element_service_impl.create_new_element(element)
         return Response(status=201, body=json.dumps(element, cls=JSONMapper))
+
 
 def show_cart_endpoint(request):
     return Response(status=200)
