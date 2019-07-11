@@ -1,14 +1,12 @@
 from backend.db.repository import repository_impl
 from backend.db.scheme import ElementEntity
 from backend.domain.element import Element
-from backend.mappers.element_mapper import ElementMapper
 from typing import List
 from backend.db.repository import repository_impl
 
 class ElementService:
     def __init__(self, repository_impl):
         self.__repository = repository_impl
-        self.mapper = ElementMapper()
 
     def get_all_elements(self):
         self.__repository.find_all_elements()
