@@ -1,50 +1,54 @@
 import unittest
+import pytest
 from pyramid import testing
+from unittest.mock import patch
 from pyramid.request import Request
+from backend.services.element_service import element_service_impl
 from backend.app import add_all_endpoints, add_endpoint, show_cart_endpoint
+import backend.json_helpers
+
+valid_json = b'{"user_name": "User","name": "lemons","amount": "5"}'
+
+@pytest.fixture(autouse=True)
+def run_around_tests(mocker):
+    mocker.patch.object(element_service_impl, "create_new_element")
+    yield
+
+def test_add_endpoint_returns_valid_status():
+    response = add_endpoint(create_add_request(valid_json))
+
+    assert response.status_code == 201
+    assert response.body == b'{"name": "lemons", "amount": "5", "price": 0.0, "user_name": "User", "bought": false, "purchase_id": null}'
 
 
-class BackendTests(unittest.TestCase):
-    def setUp(self):
-        self.config = testing.setUp()
-        add_all_endpoints(self.config)
+def test_add_endpoint_with_valid_json_calls_service():
+    add_endpoint(create_add_request(valid_json))
+    assert element_service_impl.create_new_element.call_count == 1
 
-    def tearDown(self):
-        testing.tearDown()
 
-    def test_add_endpoint_returns_valid_status(self):
-        valid_json = b'{"user": "User","elementName": "lemons","amount": "5"}'
-        response = add_endpoint(self.create_add_request(valid_json))
+@patch("backend.json_helpers.valid_request_to_add_endpoint")
+def test_invalid_requests(valid_request_to_add_endpoint):
 
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.body, valid_json)
+    valid_request_to_add_endpoint.return_value = "False"
+    check_add_endpoint_status(request = create_add_request(None), status_code = 400)
 
-    def test_invalid_requests(self):
-        missing_user = b'{"elementName": "lemons","amount": "5"}'
-        missing_elementName = b'{"user": "User","amount": "5"}'
-        missing_amount = b'{"user": "User","elementName": "lemons"}'
 
-        self.check_add_endpoint_status(self.create_add_request(missing_user), 400)
+def test_empty_add_endpoint_returns_error_message():
+    request = testing.DummyRequest(method="POST")
+    check_add_endpoint_status(request, 400)
 
-        self.check_add_endpoint_status(
-            self.create_add_request(missing_elementName), 400
-        )
 
-        self.check_add_endpoint_status(self.create_add_request(missing_amount), 400)
+def test_show_cart_endpoint_is_available():
+    request = testing.DummyRequest()
+    assert show_cart_endpoint(request).status_code == 200
 
-    def test_empty_add_endpoint_returns_error_message(self):
-        request = testing.DummyRequest(method="POST")
-        self.check_add_endpoint_status(request, 400)
 
-    def test_show_cart_endpoint_is_available(self):
-        request = testing.DummyRequest()
-        self.assertEqual(show_cart_endpoint(request).status_code, 200)
+def check_add_endpoint_status(request, status_code: int):
+    assert add_endpoint(request).status_code == status_code
 
-    def check_add_endpoint_status(self, request, status_code: int):
-        self.assertEqual(add_endpoint(request).status_code, status_code)
 
-    def create_add_request(self, json):
-        request = Request.blank("/add")
-        request.method = "POST"
-        request.body = json
-        return request
+def create_add_request(json):
+    request = Request.blank("/add")
+    request.method = "POST"
+    request.body = json
+    return request

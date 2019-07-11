@@ -15,3 +15,5 @@ class PurchaseService:
 
     def find_all_purchases(self):
         self.__repository.find_all_purchases()
+
+purchase_service = PurchaseService(repository_impl)
