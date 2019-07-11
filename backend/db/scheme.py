@@ -3,11 +3,11 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 
-class Purchase(Base):
+class PurchaseEntity(Base):
     __tablename__ = "purchase"
     purchase_id = Column(Integer, primary_key=True)
     user_name = Column(String)
-    elements = relationship("Element", back_populates="purchase")
+    #elements = relationship("Element", back_populates="purchase")
 
     def __eq__(self, value):
         return (
@@ -15,7 +15,7 @@ class Purchase(Base):
         )
 
 
-class Element(Base):
+class ElementEntity(Base):
     __tablename__ = "element"
     element_id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -24,22 +24,5 @@ class Element(Base):
     user_name = Column(String)
     bought = Column(Boolean)
     purchase_id = Column(Integer, ForeignKey("purchase.purchase_id"))
-    purchase = relationship("Purchase", back_populates="elements")
+    #purchase = relationship("Purchase", back_populates="elements")
 
-    def __repr__(self):
-        return (
-            "Element<element_id:"
-            + str(self.element_id)
-            + ", name: "
-            + str(self.name)
-            + ", amount: "
-            + str(self.amount)
-            + ", price:"
-            + str(self.price)
-            + ", user_name:"
-            + str(self.user_name)
-            + ", bought: "
-            + str(self.bought)
-            + ", purchase_id: "
-            + str(self.purchase_id)+">"
-        )

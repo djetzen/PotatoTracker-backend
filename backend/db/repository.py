@@ -1,4 +1,8 @@
-from backend.db.scheme import Purchase, Element
+from backend.db.scheme import PurchaseEntity, ElementEntity
+from backend.domain.purchase import Purchase
+from backend.domain.element import Element
+from backend.mappers.element_mapper import ElementMapper
+from backend.mappers.purchase_mapper import PurchaseMapper
 from sqlalchemy import Table, MetaData
 from backend import engine
 from sqlalchemy.orm import sessionmaker
@@ -10,51 +14,65 @@ class Repository:
         self.__engine = engine
         Session = sessionmaker(bind=self.__engine)
         self.session = Session()
+        self.purchase_mapper = PurchaseMapper()
+        self.elements_mapper = ElementMapper()
 
     def create_new_purchase(self, user_name: str):
         purchase = Purchase(user_name=user_name)
-        self.__add_and_commit(purchase)
-        return purchase
+        purchase_entity = self.__add_and_commit(self.purchase_mapper.to_purchase_entity(purchase))
+        return purchase_entity.purchase_id
 
     def find_all_purchases_for_user(self, user_name: str):
-        return self.session.query(Purchase).filter_by(user_name=user_name).all()
+        entities = self.session.query(PurchaseEntity).filter_by(user_name=user_name).all()
+        return self.purchase_mapper.to_purchases(entities)
 
     def find_purchase_by_id(self, id: int):
-        return self.session.query(Purchase).filter_by(purchase_id=id).first()
+        first_entity = self.session.query(PurchaseEntity).filter_by(purchase_id=id).first()
+        return self.purchase_mapper.to_purchase(first_entity)
 
     def find_all_purchases(self):
-        return self.session.query(Purchase).all()
+        entities = self.session.query(PurchaseEntity).all()
+        return self.purchase_mapper.to_purchases(entities)
 
     def find_all_elements(self):
-        return self.session.query(Element).all()
+        entities = self.session.query(ElementEntity).all()
+        return self.elements_mapper.to_elements(entities)
 
     def create_new_element(self, element: Element):
-        self.__add_and_commit(element)
+        element_entity = self.__add_and_commit(self.elements_mapper.to_element_entity(element))
+        return self.elements_mapper.to_element(element_entity)
 
     def find_all_elements_by_name(self, element_name:str):
-        return self.session.query(Element).filter_by(name=element_name).all()
+        entities = self.session.query(ElementEntity).filter_by(name=element_name).all()
+        return self.elements_mapper.to_elements(entities)
 
     def find_all_elements_for_user(self, user_name:str):
-        return self.session.query(Element).filter_by(user_name=user_name).all()
+        entities = self.session.query(ElementEntity).filter_by(user_name=user_name).all()
+        return self.elements_mapper.to_elements(entities)
 
     def find_only_bought_elements_by_user(self, user_name:str):
-        return self.session.query(Element).filter_by(user_name=user_name).filter_by(bought=True).all()
+        entities = self.session.query(ElementEntity).filter_by(user_name=user_name).filter_by(bought=True).all()
+        return self.elements_mapper.to_elements(entities)
 
     def find_all_elements_by_purchase_id(self, purchase_id:int):
-        return self.session.query(Element).filter_by(purchase_id=purchase_id).all()
+        entities = self.session.query(ElementEntity).filter_by(purchase_id=purchase_id).all()
+        return self.elements_mapper.to_elements(entities)
 
     def mark_as_bought(self, element:Element):
         element.bought=True
-        return self.__add_and_commit(element)
+        element_entity = self.__add_and_commit(self.elements_mapper.to_element_entity(element))
+        return self.elements_mapper.to_element(element_entity)
 
     def buy_elements(self, elements:List[Element]):
         if not elements:
             return
-        purchase = self.create_new_purchase(elements[0].user_name)
+        purchase_id = self.create_new_purchase(elements[0].user_name)
+        entities = []
         for element in elements:
             self.mark_as_bought(element)
-            element.purchase_id = purchase.purchase_id
-            self.__add_and_commit(element)
+            element.purchase_id = purchase_id
+            entities.append(self.__add_and_commit(self.elements_mapper.to_element_entity(element)))
+        return self.elements_mapper.to_elements(entities)
 
     def __get_session(self):
         return self.session
@@ -62,6 +80,7 @@ class Repository:
     def __add_and_commit(self, element):
         self.session.add(element)
         self.session.commit()
+        return element
 
 
 repository_impl = Repository(engine)

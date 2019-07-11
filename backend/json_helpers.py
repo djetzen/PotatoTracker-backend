@@ -1,5 +1,5 @@
 import json
-from backend.db.scheme import Element
+from backend.domain.element import Element
 
 def valid_request_to_add_endpoint(request_body):
     parsed_body = json.loads(request_body)
@@ -16,5 +16,4 @@ def create_element(request_body):
         element.price = parsed_body["price"]
     if "bought" in parsed_body:
         element.bought = parsed_body["bought"]
-    print(element)
     return element
