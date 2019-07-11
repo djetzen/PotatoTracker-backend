@@ -7,7 +7,7 @@ class PurchaseEntity(Base):
     __tablename__ = "purchase"
     purchase_id = Column(Integer, primary_key=True)
     user_name = Column(String)
-    #elements = relationship("Element", back_populates="purchase")
+    # elements = relationship("Element", back_populates="purchase")
 
     def __eq__(self, value):
         return (
@@ -24,5 +24,4 @@ class ElementEntity(Base):
     user_name = Column(String)
     bought = Column(Boolean)
     purchase_id = Column(Integer, ForeignKey("purchase.purchase_id"))
-    #purchase = relationship("Purchase", back_populates="elements")
-
+    # purchase = relationship("Purchase", back_populates="elements")

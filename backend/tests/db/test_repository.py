@@ -6,6 +6,7 @@ from backend.db.database import create_database
 from backend.domain.purchase import Purchase
 from backend.domain.element import Element
 
+
 class RepositoryTest(unittest.TestCase):
     user_name = "Karl"
 
@@ -29,9 +30,7 @@ class RepositoryTest(unittest.TestCase):
         purchase_id_created = self.repository.create_new_purchase(self.user_name)
 
         single_purchase = self.repository.find_purchase_by_id(purchase_id_created)
-        self.assertEqual(
-            self.user_name, single_purchase.user_name
-        )
+        self.assertEqual(self.user_name, single_purchase.user_name)
 
     def test_all_purchases_for_user_are_found(self):
         self.create_purchases(2, self.user_name)
@@ -155,4 +154,3 @@ class RepositoryTest(unittest.TestCase):
             user_name=user_name,
             purchase_id=purchase_id,
         )
-

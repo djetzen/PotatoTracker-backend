@@ -2,11 +2,15 @@ import unittest
 from pyramid import testing
 from backend.json_helpers import create_element, valid_request_to_add_endpoint
 
+
 class JsonHelperTests(unittest.TestCase):
     def test_create_element(self):
         valid_json = b'{"user_name": "User","name": "lemons","amount": "5", "price": "3.50", "bought":"true"}'
         element = create_element(valid_json)
-        self.assertEqual(str(element),"Element<name: lemons, amount: 5, price: 3.50, user_name: User, bought: true, purchase_id: None>")
+        self.assertEqual(
+            str(element),
+            "Element<name: lemons, amount: 5, price: 3.50, user_name: User, bought: true, purchase_id: None>",
+        )
 
     def test_valid_request_to_add_endpoint(self):
         missing_user = b'{"elementName": "lemons","amount": "5"}'
