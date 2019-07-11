@@ -1,6 +1,7 @@
 from backend.db.repository import repository_impl
 from backend.db.scheme import Element
 from typing import List
+from backend.db.repository import repository_impl
 
 class ElementService:
     def __init__(self, repository_impl):
@@ -25,3 +26,5 @@ class ElementService:
 
     def buy_elements(self, elements: List[Element]):
         self.__repository.buy_elements(elements)
+
+element_service = ElementService(repository_impl)
