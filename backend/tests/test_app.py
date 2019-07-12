@@ -4,7 +4,7 @@ from pyramid import testing
 from unittest.mock import patch
 from pyramid.request import Request
 from backend.services.element_service import element_service_impl
-from backend.app import add_all_endpoints, add_endpoint, show_cart_endpoint
+from backend.app import add_all_endpoints, add_endpoint, cart_endpoint
 import backend.json_helpers
 
 valid_json = b'{"user_name": "User","name": "lemons","amount": "5"}'
@@ -43,9 +43,10 @@ def test_empty_add_endpoint_returns_error_message():
     check_add_endpoint_status(request, 400)
 
 
-def test_show_cart_endpoint_is_available():
+def test_cart_endpoint_exists():
     request = testing.DummyRequest()
-    assert show_cart_endpoint(request).status_code == 200
+    request.matchdict["user_name"] = "MyUserName"
+    assert cart_endpoint(request).status_code == 200
 
 
 def check_add_endpoint_status(request, status_code: int):

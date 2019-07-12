@@ -17,7 +17,7 @@ def add_endpoint(request):
         return Response(status=201, body=json.dumps(element, cls=JSONMapper))
 
 
-def show_cart_endpoint(request):
+def cart_endpoint(request):
     return Response(status=200)
 
 
@@ -27,8 +27,8 @@ def add_all_endpoints(config):
     config.add_view(add_endpoint, route_name="add")
 
     # showCart endpoint
-    config.add_route("showCart", "/showCart", request_method="GET")
-    config.add_view(show_cart_endpoint, route_name="showCart")
+    config.add_route("cart", "/cart/{user_name}", request_method="GET")
+    config.add_view(cart_endpoint, route_name="cart")
 
 
 if __name__ == "__main__":
