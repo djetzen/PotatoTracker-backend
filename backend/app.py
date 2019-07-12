@@ -18,7 +18,10 @@ def add_endpoint(request):
 
 
 def cart_endpoint(request):
-    return Response(status=200)
+    if not request.matchdict or not "user_name" in request.matchdict:
+        return Response(status=400)
+    entities = element_service_impl.find_open_elements_by_user(request)
+    return Response(status=200, body=str(json.dumps(entities, cls=JSONMapper)))
 
 
 def add_all_endpoints(config):

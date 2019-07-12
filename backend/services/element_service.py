@@ -23,7 +23,7 @@ class ElementService:
     def find_bought_elements_by_user(self, user_name: str):
         self.__repository.find_only_bought_elements_by_user(user_name)
 
-    def find_open_elements_by_user(self, user_name: str):
+    def find_open_elements_by_user(self, user_name: str) -> List[Element]:
         self.__repository.find_only_unbought_elements_by_user(user_name)
 
     def find_elements_by_purchase_id(self, purchase_id: int):
