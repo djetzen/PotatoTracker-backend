@@ -15,6 +15,7 @@ def run_around_tests(mocker):
     mocker.patch.object(repository, "find_only_bought_elements_by_user")
     mocker.patch.object(repository, "find_all_elements_by_purchase_id")
     mocker.patch.object(repository, "buy_elements")
+    mocker.patch.object(repository, "find_only_unbought_elements_by_user")
     yield
 
 
@@ -41,6 +42,11 @@ def test_should_call_find_all_elements_for_user():
 def test_should_call_find_only_bought_elements_by_user():
     service.find_bought_elements_by_user("")
     assert repository.find_only_bought_elements_by_user.call_count == 1
+
+
+def test_should_call_find_only_unbought_elements_by_user():
+    service.find_open_elements_by_user("")
+    assert repository.find_only_unbought_elements_by_user.call_count == 1
 
 
 def test_should_call_find_all_elements_by_purchase_id():
