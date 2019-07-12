@@ -98,6 +98,22 @@ class RepositoryTest(unittest.TestCase):
         )
         self.assertEqual(2, len(bought_elements))
 
+    def test_find_only_unbought_elements_by_user(self):
+        self.repository.create_new_element(
+            self.create_element(name="Lemons", user_name=self.user_name, bought=True)
+        )
+        self.repository.create_new_element(
+            self.create_element(name="Lemons", user_name=self.user_name, bought=True)
+        )
+        self.repository.create_new_element(
+            self.create_element(name="Apples", user_name=self.user_name)
+        )
+
+        bought_elements = self.repository.find_only_unbought_elements_by_user(
+            self.user_name
+        )
+        self.assertEqual(1, len(bought_elements))
+
     def test_element_can_be_updated_to_be_bought(self):
         element = self.create_element(name="Lemons", user_name=self.user_name)
         self.repository.create_new_element(element)

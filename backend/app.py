@@ -2,7 +2,6 @@ from waitress import serve
 from pyramid.config import Configurator
 from pyramid.response import Response
 from backend.db.database import Base, create_database
-from backend.db.scheme import ElementEntity
 from backend.services.element_service import element_service_impl
 from backend.json_helpers import valid_request_to_add_endpoint, create_element
 from backend.db.json_mapper import JSONMapper
@@ -18,8 +17,13 @@ def add_endpoint(request):
         return Response(status=201, body=json.dumps(element, cls=JSONMapper))
 
 
-def show_cart_endpoint(request):
-    return Response(status=200)
+def cart_endpoint(request):
+    if not request.matchdict or not "user_name" in request.matchdict:
+        return Response(status=400)
+    entities = element_service_impl.find_open_elements_by_user(
+        request.matchdict["user_name"]
+    )
+    return Response(status=200, body=str(json.dumps(entities, cls=JSONMapper)))
 
 
 def add_all_endpoints(config):
@@ -28,8 +32,8 @@ def add_all_endpoints(config):
     config.add_view(add_endpoint, route_name="add")
 
     # showCart endpoint
-    config.add_route("showCart", "/showCart", request_method="GET")
-    config.add_view(show_cart_endpoint, route_name="showCart")
+    config.add_route("cart", "/cart/{user_name}", request_method="GET")
+    config.add_view(cart_endpoint, route_name="cart")
 
 
 if __name__ == "__main__":

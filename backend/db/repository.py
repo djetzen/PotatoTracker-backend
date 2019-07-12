@@ -69,6 +69,15 @@ class Repository:
         )
         return self.elements_mapper.to_elements(entities)
 
+    def find_only_unbought_elements_by_user(self, user_name: str):
+        entities = (
+            self.session.query(ElementEntity)
+            .filter_by(user_name=user_name)
+            .filter_by(bought=False)
+            .all()
+        )
+        return self.elements_mapper.to_elements(entities)
+
     def find_all_elements_by_purchase_id(self, purchase_id: int):
         entities = (
             self.session.query(ElementEntity).filter_by(purchase_id=purchase_id).all()
