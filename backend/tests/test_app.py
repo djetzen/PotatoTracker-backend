@@ -6,7 +6,12 @@ from unittest.mock import patch
 from pyramid.request import Request
 from backend.domain.element import Element
 from backend.services.element_service import element_service_impl
-from backend.app import add_all_endpoints, add_endpoint, cart_endpoint
+from backend.app import (
+    add_all_endpoints,
+    add_endpoint,
+    cart_endpoint,
+    purchase_id_endpoint,
+)
 from backend.db.json_mapper import JSONMapper
 import backend.json_helpers
 
@@ -25,6 +30,11 @@ def run_around_tests(mocker):
         element_service_impl, "find_open_elements_by_user"
     )
     open_elements_mock.return_value = mocked_elements
+
+    purchase_id_mock = mocker.patch.object(
+        element_service_impl, "find_elements_by_purchase_id"
+    )
+    purchase_id_mock.return_value = mocked_elements
     yield
 
 
@@ -76,6 +86,25 @@ def test_cart_endpoint_calls_element_service():
     request = testing.DummyRequest()
     request.matchdict["user_name"] = "MyUserName"
     response = cart_endpoint(request)
+    assert response.body == bytearray(
+        json.dumps(mocked_elements, cls=JSONMapper), "utf-8"
+    )
+
+
+def test_purchase_id_endpoint_delivers_400_without_id():
+    request = testing.DummyRequest()
+    response = purchase_id_endpoint(request)
+
+    assert response.status_code == 400
+
+
+def test_purchase_id_endpoint_delivers_200_with_id():
+    request = testing.DummyRequest()
+    request.matchdict["id"] = "1"
+    response = purchase_id_endpoint(request)
+
+    assert response.status_code == 200
+    assert element_service_impl.find_elements_by_purchase_id.call_count == 1
     assert response.body == bytearray(
         json.dumps(mocked_elements, cls=JSONMapper), "utf-8"
     )

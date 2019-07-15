@@ -22,4 +22,6 @@ def create_element(request_body):
         element.price = parsed_body["price"]
     if "bought" in parsed_body:
         element.bought = parsed_body["bought"]
+    if "purchase_id" in parsed_body:
+        element.purchase_id = parsed_body["purchase_id"]
     return element
