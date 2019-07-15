@@ -16,6 +16,32 @@ Please install the pre-commit hook with hooks/install_hooks.sh. This pre-commit 
 ## Structure
 There is the source folder called backend/ and the tests are inside the backend/tests folder.
 
+## Endpoints
+There are several endpoints, which are the following:
+### /add
+This is a POST-Endpoint. Input is something like this: `{"user_name": "User","name": "lemons","amount": "5"}` and return value on success is something like this: `{"name": "lemons", "amount": "5", "price": 0.0, "user_name": "User", "bought": false, "purchase_id": null}`
+
+### /cart/{user_name}
+This endpoint exists in two different methods. GET and PUT
+#### GET
+This endpoint returns all the elements, which are assigned to a user and which are not already bought (bought:False)
+#### PUT
+This PUT endpoint indicates, that a purchase is triggered. Therefore the elements are given in such a way:
+```
+{"elements": [{"name": "Lemons","amount": 5,"user_name": "User"},{"name": "Apples","amount": 3,"price": 0,"user_name": "User"}]}
+```
+and returned is something like this:
+```
+[{"name": "Lemons", "amount": 5, "price": 0.0, "user_name": "User", "bought": true, "purchase_id": 1}, {"name": "Apples", "amount": 3, "price": 0.0, "user_name": "User", "bought": true, "purchase_id": 1}]
+```
+
+### /purchase/{id}
+This is a GET endpoint, which returns all the elements, which are assigned to a specific purchase.
+Example return value:
+```
+[{"name": "Lemons", "amount": 5, "price": 0.0, "user_name": "User", "bought": false, "purchase_id": null}, {"name": "Apples", "amount": 3, "price": 0.0, "user_name": "User", "bought": false, "purchase_id": null}]
+```
+
 ## Database
 ### Tables
 - Purchase (ID (PK), user_name:String)
