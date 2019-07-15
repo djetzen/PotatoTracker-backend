@@ -26,6 +26,15 @@ def cart_endpoint(request):
     return Response(status=200, body=str(json.dumps(entities, cls=JSONMapper)))
 
 
+def purchase_id_endpoint(request):
+    if not request.matchdict or not "id" in request.matchdict:
+        return Response(status=400)
+    elements = element_service_impl.find_elements_by_purchase_id(
+        request.matchdict["id"]
+    )
+    return Response(status=200, body=str(json.dumps(elements, cls=JSONMapper)))
+
+
 def add_all_endpoints(config):
     # add endpoint
     config.add_route("add", "/add", request_method="POST")
@@ -34,6 +43,10 @@ def add_all_endpoints(config):
     # showCart endpoint
     config.add_route("cart", "/cart/{user_name}", request_method="GET")
     config.add_view(cart_endpoint, route_name="cart")
+
+    # purchase/id endpoint
+    config.add_rout("purchase_id", "/purchase/{id}", request_method="GET")
+    config.add_view(purchase_id_endpoint, route_name="purchase_id")
 
 
 if __name__ == "__main__":
