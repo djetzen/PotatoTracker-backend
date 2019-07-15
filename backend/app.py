@@ -35,12 +35,16 @@ def purchase_id_endpoint(request):
     return Response(status=200, body=str(json.dumps(elements, cls=JSONMapper)))
 
 
+def cart_endpoint_put(request):
+    return Response(status=400)
+
+
 def add_all_endpoints(config):
     # add endpoint
     config.add_route("add", "/add", request_method="POST")
     config.add_view(add_endpoint, route_name="add")
 
-    # showCart endpoint
+    # cart endpoint /GET
     config.add_route("cart", "/cart/{user_name}", request_method="GET")
     config.add_view(cart_endpoint, route_name="cart")
 
@@ -48,9 +52,18 @@ def add_all_endpoints(config):
     config.add_route("purchase_id", "/purchase/{id}", request_method="GET")
     config.add_view(purchase_id_endpoint, route_name="purchase_id")
 
+    # cart endpoint /PUT
+    config.add_route("cart_put", "/cart/{user_name}", request_method="PUT")
+    config.add_view(cart_endpoint_put, route_name="cart_put")
 
-if __name__ == "__main__":
+
+def main():
     config = Configurator()
     add_all_endpoints(config)
     app = config.make_wsgi_app()
+    return app
+
+
+if __name__ == "__main__":
+    app = main()
     serve(app, host="0.0.0.0", port=6543)
