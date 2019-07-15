@@ -45,7 +45,7 @@ def add_all_endpoints(config):
     config.add_view(cart_endpoint, route_name="cart")
 
     # purchase/id endpoint
-    config.add_rout("purchase_id", "/purchase/{id}", request_method="GET")
+    config.add_route("purchase_id", "/purchase/{id}", request_method="GET")
     config.add_view(purchase_id_endpoint, route_name="purchase_id")
 
 
