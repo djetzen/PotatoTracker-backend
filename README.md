@@ -4,6 +4,9 @@
 # PotatoTracker-backend
 Shopping app backend, which should be deployed later on a raspberry pi
 
+## Docker
+You can build a docker image using `docker -t <yourNameOfTheImage> build .` from root directory. Running the container can be done with `docker container run -p 654:6543 <yourNameOfTheImage>`
+
 ## Contributing
 Adding functionality is only possible with a pull request. Direct commits to master are prohibited. Before a pull request can be merged, the automatically triggered travis build needs to be succesful. Also the branch needs to be uptodate to master before merging. Therefore please click on the button inside the pull request or merge it manually.
 
