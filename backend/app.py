@@ -14,42 +14,57 @@ import json
 
 def add_endpoint(request):
     if not request.body or not valid_request_to_add_endpoint(request.body):
-        return Response(status=400)
+        return create_response_object(status=400)
     else:
         element = create_element_from_json(json.loads(request.body))
         element_service_impl.create_new_element(element)
-        return Response(status=201, body=json.dumps(element, cls=JSONMapper))
+        return create_response_object(
+            status=201, body=json.dumps(element, cls=JSONMapper)
+        )
 
 
 def cart_endpoint(request):
     if not request.matchdict or not "user_name" in request.matchdict:
-        return Response(status=400)
+        return create_response_object(status=400)
     entities = element_service_impl.find_open_elements_by_user(
         request.matchdict["user_name"]
     )
-    return Response(status=200, body=str(json.dumps(entities, cls=JSONMapper)))
+    return create_response_object(
+        status=200, body=str(json.dumps(entities, cls=JSONMapper))
+    )
 
 
 def purchase_id_endpoint(request):
     if not request.matchdict or not "id" in request.matchdict:
-        return Response(status=400)
+        return create_response_object(status=400)
     elements = element_service_impl.find_elements_by_purchase_id(
         request.matchdict["id"]
     )
-    return Response(status=200, body=str(json.dumps(elements, cls=JSONMapper)))
+    return create_response_object(
+        status=200, body=str(json.dumps(elements, cls=JSONMapper))
+    )
 
 
 def cart_endpoint_put(request):
     if not request.body:
-        return Response(status=400)
+        return create_response_object(status=400)
     elements = create_elements(request.body)
     if not elements:
         return Response(status=400)
     else:
         bought_elements = element_service_impl.buy_elements(elements)
-        return Response(
+        return create_response_object(
             status=200, body=str(json.dumps(bought_elements, cls=JSONMapper))
         )
+
+
+def create_response_object(status=200, body: str = ""):
+
+    response = Response(status=status, body=body)
+    response.text = body
+    response.status = status
+    response.headers.update({"Access-Control-Allow-Origin": "*"})
+    return response
 
 
 def add_all_endpoints(config):
