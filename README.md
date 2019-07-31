@@ -38,7 +38,7 @@ and returned is something like this:
 [{"name": "Lemons", "amount": 5, "price": 0.0, "user_name": "User", "bought": true, "purchase_id": 1}, {"name": "Apples", "amount": 3, "price": 0.0, "user_name": "User", "bought": true, "purchase_id": 1}]
 ```
 
-### /purchase/{id}
+### /purchases/{id}
 This is a GET endpoint, which returns all the elements, which are assigned to a specific purchase.
 Example return value:
 ```
