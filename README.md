@@ -45,6 +45,9 @@ Example return value:
 [{"name": "Lemons", "amount": 5, "price": 0.0, "user_name": "User", "bought": false, "purchase_id": null}, {"name": "Apples", "amount": 3, "price": 0.0, "user_name": "User", "bought": false, "purchase_id": null}]
 ```
 
+### /purchases/
+This is a GET endpoint, which returns all the purchases which were created so far.
+
 ## Database
 ### Tables
 - Purchase (ID (PK), user_name:String)
