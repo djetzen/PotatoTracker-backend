@@ -87,7 +87,7 @@ class EndpointTests(unittest.TestCase):
         )
 
     def test_purchase_id_endpoint_delivers_400_without_id(self):
-        response = self.testapp.get("/purchase/1")
+        response = self.testapp.get("/purchases/1")
         assert response.status_code == 200
         assert element_service_impl.find_elements_by_purchase_id.call_count == 1
         assert response.body == bytearray(
