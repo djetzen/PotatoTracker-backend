@@ -5,7 +5,9 @@ from pyramid import testing
 from unittest.mock import patch
 from pyramid.request import Request
 from backend.domain.element import Element
+from backend.domain.purchase import Purchase
 from backend.services.element_service import element_service_impl
+from backend.services.purchase_service import purchase_service
 from backend.app import (
     add_all_endpoints,
     add_endpoint,
@@ -23,6 +25,10 @@ valid_add_json = b'{"user_name": "User","name": "lemons","amount": "5"}'
 mocked_elements = [
     Element(name="Lemons", amount=5, user_name="User"),
     Element(name="Apples", amount=3, user_name="User"),
+]
+mocked_purchases = [
+    Purchase(purchase_id=1, user_name="User"),
+    Purchase(purchase_id=2, user_name="User2"),
 ]
 bought_and_mocked_elements = [
     Element(name="Lemons", amount=5, user_name="User", bought=True, purchase_id=1),
@@ -51,6 +57,9 @@ class EndpointTests(unittest.TestCase):
             element_service_impl, "find_elements_by_purchase_id"
         )
         purchase_id_mock.return_value = mocked_elements
+
+        purchase_mock = mocker.patch.object(purchase_service, "find_all_purchases")
+        purchase_mock.return_value = mocked_purchases
 
         buy_elements_mock = mocker.patch.object(element_service_impl, "buy_elements")
         buy_elements_mock.return_value = bought_and_mocked_elements
@@ -92,6 +101,14 @@ class EndpointTests(unittest.TestCase):
         assert element_service_impl.find_elements_by_purchase_id.call_count == 1
         assert response.body == bytearray(
             json.dumps(mocked_elements, cls=JSONMapper), "utf-8"
+        )
+
+    def test_purchase_endpoint_delivers_correct_values(self):
+        response = self.testapp.get("/purchases/")
+        assert response.status_code == 200
+        assert purchase_service.find_all_purchases.call_count == 1
+        assert response.body == bytearray(
+            json.dumps(mocked_purchases, cls=JSONMapper), "utf-8"
         )
 
     def test_put_endpoint_for_cart_exists_and_must_not_be_empty(self):

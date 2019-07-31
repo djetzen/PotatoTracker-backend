@@ -3,6 +3,7 @@ from pyramid.config import Configurator
 from pyramid.response import Response
 from backend.db.database import Base, create_database
 from backend.services.element_service import element_service_impl
+from backend.services.purchase_service import purchase_service
 from backend.json_helpers import (
     valid_request_to_add_endpoint,
     create_element_from_json,
@@ -45,6 +46,11 @@ def purchase_id_endpoint(request):
     )
 
 
+def purchases_endpoint(request):
+    purchases = purchase_service.find_all_purchases()
+    return Response(status=200, body=str(json.dumps(purchases, cls=JSONMapper)))
+
+
 def cart_endpoint_put(request):
     if not request.body:
         return create_response_object(status=400)
@@ -79,6 +85,10 @@ def add_all_endpoints(config):
     # purchase/id endpoint
     config.add_route("purchase_id", "/purchases/{id}", request_method="GET")
     config.add_view(purchase_id_endpoint, route_name="purchase_id")
+
+    # purchases endpoint
+    config.add_route("purchases", "/purchases/", request_method="GET")
+    config.add_view(purchases_endpoint, route_name="purchases")
 
     # cart endpoint /PUT
     config.add_route("cart_put", "/cart/{user_name}", request_method="PUT")

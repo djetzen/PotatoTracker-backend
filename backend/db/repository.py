@@ -18,10 +18,7 @@ class Repository:
         self.elements_mapper = ElementMapper()
 
     def create_new_purchase(self, user_name: str):
-        purchase = Purchase(user_name=user_name)
-        purchase_entity = self.__add_and_commit(
-            self.purchase_mapper.to_purchase_entity(purchase)
-        )
+        purchase_entity = self.__add_and_commit(PurchaseEntity(user_name=user_name))
         return purchase_entity.purchase_id
 
     def find_all_purchases_for_user(self, user_name: str):
