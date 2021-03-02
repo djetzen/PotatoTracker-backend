@@ -7,4 +7,4 @@ WebTest==2.0.35
 pytest==4.6.11
 pytest-mock==1.10.4
 coverage==4.5.4
-pytest-cov==2.7.1
+pytest-cov==2.11.1
