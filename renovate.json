@@ -1,6 +1,6 @@
 {
   "extends": [
     "config:base",
-    "prhourlylimit: 0"
+    "prhourlylimit": 0
   ]
 }
