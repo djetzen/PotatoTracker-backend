@@ -1,4 +1,4 @@
-FROM python:3.9.3-alpine
+FROM python:3.9.4-alpine
 
 RUN apk --update --no-cache add curl && rm -rf /var/cache/apk/*
 
