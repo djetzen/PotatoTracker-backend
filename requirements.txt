@@ -4,7 +4,7 @@ SQLAlchemy==1.4.6
 object-mapper==1.0.6
 WebTest==2.0.35
 #test dependencies
-pytest==6.2.3
+pytest==6.2.4
 pytest-mock==3.5.1
 coverage==5.5
 pytest-cov==2.11.1
