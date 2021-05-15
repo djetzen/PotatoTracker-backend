@@ -1,6 +1,6 @@
 pyramid==2.0
 waitress==2.0.0
-SQLAlchemy==1.4.6
+SQLAlchemy==1.4.15
 object-mapper==1.0.6
 WebTest==2.0.35
 #test dependencies
