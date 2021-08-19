@@ -2,7 +2,7 @@ pyramid==2.0
 waitress==2.0.0
 SQLAlchemy==1.4.22
 object-mapper==1.0.6
-WebTest==2.0.35
+WebTest==3.0.0
 #test dependencies
 pytest==6.2.4
 pytest-mock==3.6.1
